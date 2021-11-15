@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'app_version' => env('APP_VERSION',1),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
