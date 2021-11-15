@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OfficeFactory extends Factory
 {
-    protected $model = Office::class;
     /**
      * Define the model's default state.
      *
@@ -22,8 +21,8 @@ class OfficeFactory extends Factory
             'lat' => $this->faker->latitude,
             'lng' => $this->faker->longitude,
             'address_line1' => $this->faker->address,
-            'approval_status' => 2,
-            'hidden' => false,
+            'approval_status' => Office::APPROVAL_PENDING,
+            'hidden' => Office::VISIBLE,
             'price_per_day' => $this->faker->numberBetween(1_000,2_000),
             'monthly_discount' => $this->faker->numberBetween(0,100),
             'user_id' => User::factory()
