@@ -14,6 +14,12 @@ class Office extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const APPROVAL_APPROVED = 1;
+    const APPROVAL_PENDING = 2;
+    const APPROVAL_CANCELED = 3;
+    const NOT_VISIBLE = true;
+    const VISIBLE = false;
+
     protected $casts = [
         'lat' => 'decimal:8',
         'lng' => 'decimal:8',
