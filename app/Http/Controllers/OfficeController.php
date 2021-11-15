@@ -2,19 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OfficeResource;
 use App\Models\Office;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class OfficeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        //
+        $offices = Office::query()
+            ->where('approval_status',Office::APPROVAL_APPROVED)
+            ->where('hidden',Office::VISIBLE)
+            ->latest('created_at')
+            ->paginate(20);
+
+        return OfficeResource::collection(
+          $offices
+        );
     }
 
     /**
