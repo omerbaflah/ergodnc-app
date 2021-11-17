@@ -71,7 +71,6 @@ class OfficesControllerTest extends TestCase
             ->where('hidden',Office::VISIBLE)
             ->count();
 
-        echo $visibleOfficesCount;
         $this->get($this->uri)->assertOk()->assertJsonStructure([
             'data' => [
                 '*' => [
