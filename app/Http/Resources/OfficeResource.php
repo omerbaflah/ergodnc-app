@@ -14,6 +14,17 @@ class OfficeResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+            'lat' => $this->lat,
+            'lng' => $this->lng,
+            'address_line1' => $this->address_line1,
+            'approval_status' => $this->approval_status,
+            'hidden' => $this->hidden,
+            'price_per_day' => $this->price_per_day,
+            'monthly_discount' => $this->monthly_discount,
+            'user' => UsersListResource::make($this->user)
+        ];
     }
 }
