@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers;
 
 use App\Models\Office;
+use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -149,5 +150,29 @@ class OfficesControllerTest extends TestCase
         )->assertOk()->assertJsonCount(1,'data');
 
         $this->assertEquals($office->id,$response->json('data')[0]['id']);
+    }
+
+    /**
+     * @test
+     */
+    public function itFiltersByUserId()
+    {
+        Office::factory()->count(3)->create();
+
+        $user = User::factory()->create();
+
+        $office = Office::factory()->create([
+            'approval_status' => Office::APPROVAL_APPROVED
+        ]);
+
+        Reservation::factory()->for($office)->for($user)->create();
+
+        $response = $this->get(
+            $this->uri . '?user_id=' . $user->id
+        )->assertOk()->assertJsonCount(1,'data');
+
+        $this->assertEquals($office->id,$response->json('data')[0]['id']);
+
+        //TODO check how to create the factory of a model with their relationships
     }
 }
