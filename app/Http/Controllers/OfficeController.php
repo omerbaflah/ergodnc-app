@@ -23,6 +23,14 @@ class OfficeController extends Controller
             ->when($request->get('host_id'), function (Builder $builder) use($request) {
                 $builder->where('user_id', $request->get('host_id'));
             })
+            ->when($request->get('user_id'), function (Builder $builder) use ($request) {
+                $builder->whereRelation(
+                    'reservations',
+                    'user_id',
+                    '=',
+                    $request->get('user_id')
+                );
+            })
             ->latest('created_at')
             ->with([
                 'user',
