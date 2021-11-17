@@ -20,6 +20,11 @@ class OfficeController extends Controller
             ->where('approval_status',Office::APPROVAL_APPROVED)
             ->where('hidden',Office::VISIBLE)
             ->latest('created_at')
+            ->with([
+                'user',
+                'tags',
+                'images'
+            ])
             ->paginate(20);
 
         return OfficeResource::collection(
