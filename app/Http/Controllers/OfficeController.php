@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\OfficeResource;
 use App\Models\Office;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -14,11 +15,14 @@ class OfficeController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
         $offices = Office::query()
             ->where('approval_status',Office::APPROVAL_APPROVED)
             ->where('hidden',Office::VISIBLE)
+            ->when($request->get('host_id'), function (Builder $builder) use($request) {
+                $builder->where('user_id', $request->get('host_id'));
+            })
             ->latest('created_at')
             ->with([
                 'user',
