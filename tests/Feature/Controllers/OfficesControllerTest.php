@@ -247,4 +247,49 @@ class OfficesControllerTest extends TestCase
 
         $this->assertEquals(3,$response->json('data')[0]['reservations_count']);
     }
+
+    /**
+     * @test
+     */
+    public function itOrdersByDistanceWhenCoordinatesAreProvided()
+    {
+        //lisbon coordinates
+        //lat 38.720661384644046
+        //lng -9.16044783453807
+
+        $lat = 38.720661384644046;
+        $lng = -9.16044783453807;
+
+        $user = User::factory()->create();
+
+        //far office
+        $leiria = Office::factory()->for($user)->create([
+            'title' => 'Leiria',
+            'lat' => 39.74051727562952,
+            'lng' => -8.770375324893696,
+            'approval_status' => Office::APPROVAL_APPROVED
+        ]);
+
+        //closer office
+        $torres_vedras = Office::factory()->for($user)->create([
+            'title' => 'Torres Vedras',
+            'lat' => 39.07753883078113,
+            'lng' => -9.281266331143293,
+            'approval_status' => Office::APPROVAL_APPROVED
+        ]);
+
+        $response = $this->get(
+            $this->uri . "?host_id=" . $user->id . "&lat=" . $lat . "&lng=" . $lng
+        )->assertOk();
+
+        $this->assertEquals($torres_vedras->title,$response->json('data')[0]['title']);
+        $this->assertEquals($leiria->title,$response->json('data')[1]['title']);
+
+        $response = $this->get(
+            $this->uri . "?host_id=" . $user->id
+        )->assertOk();
+
+        $this->assertEquals($leiria->title,$response->json('data')[0]['title']);
+        $this->assertEquals($torres_vedras->title,$response->json('data')[1]['title']);
+    }
 }
