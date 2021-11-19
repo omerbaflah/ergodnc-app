@@ -20,6 +20,7 @@ class OfficeResource extends JsonResource
             'description' => $this->description,
             'lat' => $this->lat,
             'lng' => $this->lng,
+            'distance' => $this->distance,
             'address_line1' => $this->address_line1,
             'approval_status' => $this->approval_status,
             'hidden' => $this->hidden,
