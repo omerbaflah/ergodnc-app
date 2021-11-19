@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\OfficeResource;
 use App\Models\Office;
+use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -37,6 +38,9 @@ class OfficeController extends Controller
                 'tags',
                 'images'
             ])
+            ->withCount(['reservations' => function (Builder $builder) {
+                $builder->where('status','=',Reservation::STATUS_ACTIVE);
+            }])
             ->paginate(20);
 
         return OfficeResource::collection(
