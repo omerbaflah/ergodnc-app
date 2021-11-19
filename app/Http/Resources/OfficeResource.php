@@ -25,6 +25,7 @@ class OfficeResource extends JsonResource
             'hidden' => $this->hidden,
             'price_per_day' => $this->price_per_day,
             'monthly_discount' => $this->monthly_discount,
+            'reservations_count' => $this->reservations_count,
             'user' => UsersListResource::make($this->user),
             'images' => ImageResource::collection($this->images),
             'tags' => TagResource::collection($this->tags),
