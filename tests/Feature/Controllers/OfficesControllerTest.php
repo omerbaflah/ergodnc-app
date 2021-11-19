@@ -223,4 +223,28 @@ class OfficesControllerTest extends TestCase
 
         //TODO check how to create the factory of a model with their relationships
     }
+
+    /**
+     * @test
+     */
+    public function itReturnsTheNumberOfActiveReservations()
+    {
+        $user = User::factory()->create();
+
+        $office = Office::factory()->for($user)->create([
+            'approval_status' => Office::APPROVAL_APPROVED
+        ]);
+
+        Reservation::factory()->count(3)->for($office)->create();
+
+        Reservation::factory()->for($office)->create([
+            'status' => Reservation::STATUS_CANCELED
+        ]);
+
+        $response = $this->get($this->uri . '?host_id=' . $user->id)
+            ->assertOk()
+            ->assertSee('reservations_count');
+
+        $this->assertEquals(3,$response->json('data')[0]['reservations_count']);
+    }
 }
