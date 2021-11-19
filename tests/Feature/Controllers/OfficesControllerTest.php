@@ -4,6 +4,7 @@ namespace Tests\Feature\Controllers;
 
 use App\Models\Office;
 use App\Models\Reservation;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -130,6 +131,53 @@ class OfficesControllerTest extends TestCase
                 ]
             ]
         ])->assertJsonCount($notApprovedOfficesCount,'data');
+    }
+
+    /**
+     * @test
+     */
+    public function itEagerLoadingRelationsForOfficeModel()
+    {
+        $user = User::factory()->create();
+
+        $office = Office::factory()->for($user)->create([
+            'approval_status' => Office::APPROVAL_APPROVED
+        ]);
+
+        $tagIds = Tag::all()->pluck('id');
+
+        $office->images()->create([
+            'path' => 'image.png'
+        ]);
+
+        $office->tags()->sync($tagIds);
+
+        $response = $this->get(
+            $this->uri . '?host_id=' . $user->id
+        )->assertOk()->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'title',
+                    'description',
+                    'user',
+                    'images',
+                    'tags'
+                ],
+            ],
+            'links',
+            'meta'
+        ]);
+
+        $this->assertIsArray($response->json('data')[0]['user']);
+
+        $this->assertIsArray($response->json('data')[0]['images']);
+
+        $this->assertIsArray($response->json('data')[0]['tags']);
+
+        $this->assertEquals($office->id,$response->json('data')[0]['id']);
+
+        $this->assertEquals($user->id,$response->json('data')[0]['user']['id']);
     }
 
     /**
