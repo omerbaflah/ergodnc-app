@@ -32,7 +32,13 @@ class OfficeController extends Controller
                     $request->get('user_id')
                 );
             })
-            ->latest('created_at')
+            ->when($request->get('lat') && $request->get('lng'),
+                function (Builder $builder) use ($request) {
+                    $builder->nearestTo($request->get('lat'), $request->get('lng'));
+                },
+                function (Builder $builder) {
+                    $builder->oldest();
+                })
             ->with([
                 'user',
                 'tags',
