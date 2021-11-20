@@ -68,19 +68,19 @@ class OfficeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Office  $office
-     * @return \Illuminate\Http\Response
+     * @param Office $office
+     * @return OfficeResource
      */
     public function show(Office $office)
     {
-        //
+        return OfficeResource::make($office);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Office  $office
+     * @param Office $office
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Office $office)
@@ -91,7 +91,7 @@ class OfficeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Office  $office
+     * @param Office $office
      * @return \Illuminate\Http\Response
      */
     public function destroy(Office $office)
