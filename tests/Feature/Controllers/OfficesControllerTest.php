@@ -292,4 +292,56 @@ class OfficesControllerTest extends TestCase
         $this->assertEquals($leiria->title,$response->json('data')[0]['title']);
         $this->assertEquals($torres_vedras->title,$response->json('data')[1]['title']);
     }
+
+    /**
+     * @test
+     */
+    public function itShowsTheOffice()
+    {
+        $user = User::factory()->create();
+
+        $office = Office::factory()->for($user)->create([
+            'approval_status' => Office::APPROVAL_APPROVED
+        ]);
+
+        $tagIds = Tag::all()->pluck('id');
+
+        $office->images()->create([
+            'path' => 'image.png'
+        ]);
+
+        $office->tags()->sync($tagIds);
+
+        Reservation::factory()->count(3)->for($office)->create();
+
+        Reservation::factory()->for($office)->create([
+            'status' => Reservation::STATUS_CANCELED
+        ]);
+
+        $response = $this->get($this->uri . '/' . $office->id)
+            ->assertOk()
+            ->assertSee('reservations_count')
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'description',
+                    'user',
+                    'images',
+                    'tags'
+                ]
+            ]);
+
+        $this->assertIsArray($response->json('data')['user']);
+
+        $this->assertIsArray($response->json('data')['images']);
+
+        $this->assertIsArray($response->json('data')['tags']);
+
+        $this->assertEquals($office->id,$response->json('data')['id']);
+
+        $this->assertEquals($user->id,$response->json('data')['user']['id']);
+
+        $this->assertEquals(3,$response->json('data')['reservations_count']);
+    }
 }
