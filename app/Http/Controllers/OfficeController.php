@@ -77,7 +77,9 @@ class OfficeController extends Controller
             'user',
             'tags',
             'images'
-        ]);
+        ])->loadCount(['reservations' => function (Builder $builder) {
+            $builder->where('status', '=', Reservation::STATUS_ACTIVE);
+        }]);
 
         return OfficeResource::make($office);
     }
