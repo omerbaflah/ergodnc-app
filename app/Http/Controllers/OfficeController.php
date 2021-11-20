@@ -73,6 +73,12 @@ class OfficeController extends Controller
      */
     public function show(Office $office)
     {
+        $office->load([
+            'user',
+            'tags',
+            'images'
+        ]);
+
         return OfficeResource::make($office);
     }
 
