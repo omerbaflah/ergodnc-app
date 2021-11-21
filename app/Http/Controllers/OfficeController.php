@@ -19,9 +19,9 @@ class OfficeController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $offices = Office::query()
-            ->where('approval_status',Office::APPROVAL_APPROVED)
-            ->where('hidden',Office::VISIBLE)
-            ->when($request->get('host_id'), function (Builder $builder) use($request) {
+            ->where('approval_status', Office::APPROVAL_APPROVED)
+            ->where('hidden', Office::VISIBLE)
+            ->when($request->get('host_id'), function (Builder $builder) use ($request) {
                 $builder->where('user_id', $request->get('host_id'));
             })
             ->when($request->get('user_id'), function (Builder $builder) use ($request) {
@@ -45,12 +45,12 @@ class OfficeController extends Controller
                 'images'
             ])
             ->withCount(['reservations' => function (Builder $builder) {
-                $builder->where('status','=',Reservation::STATUS_ACTIVE);
+                $builder->where('status', '=', Reservation::STATUS_ACTIVE);
             }])
             ->paginate(20);
 
         return OfficeResource::collection(
-          $offices
+            $offices
         );
     }
 
