@@ -19,7 +19,9 @@ class ReservationResource extends JsonResource
             'price' => $this->price,
             'status' => $this->status,
             'start_date' => $this->start_date,
-            'end_date' => $this->end_date
+            'end_date' => $this->end_date,
+            'user' => UsersListResource::make($this->user),
+            'office' => OfficeResource::make($this->office)
         ];
     }
 }
