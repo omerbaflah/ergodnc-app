@@ -74,4 +74,9 @@ class Office extends Model
         $builder->where('approval_status','=',self::APPROVAL_CANCELED);
     }
 
+    public function scopeVisible(Builder $builder)
+    {
+        $builder->where('hidden','=',self::VISIBLE);
+    }
+
 }
