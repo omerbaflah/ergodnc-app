@@ -64,4 +64,9 @@ class Office extends Model
         $builder->where('approval_status','=',self::APPROVAL_APPROVED);
     }
 
+    public function scopePending(Builder $builder)
+    {
+        $builder->where('approval_status','=',self::APPROVAL_PENDING);
+    }
+
 }
