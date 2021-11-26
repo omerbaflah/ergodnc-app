@@ -58,4 +58,10 @@ class Office extends Model
             [$lat, $lng]
         )->orderBy('distance');
     }
+
+    public function scopeApproved(Builder $builder)
+    {
+        $builder->where('approval_status','=',self::APPROVAL_APPROVED);
+    }
+
 }
