@@ -79,4 +79,8 @@ class Office extends Model
         $builder->where('hidden','=',self::VISIBLE);
     }
 
+    public function scopeNotVisible(Builder $builder)
+    {
+        $builder->where('hidden','=',self::NOT_VISIBLE);
+    }
 }
