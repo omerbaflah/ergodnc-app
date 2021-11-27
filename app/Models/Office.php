@@ -59,9 +59,9 @@ class Office extends Model
         )->orderBy('distance');
     }
 
-    public function scopeApproved(Builder $builder)
+    public function scopeApproved(Builder $builder): Builder
     {
-        $builder->where('approval_status','=',self::APPROVAL_APPROVED);
+        return $builder->where('approval_status','=',self::APPROVAL_APPROVED);
     }
 
     public function scopePending(Builder $builder)
