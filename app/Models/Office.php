@@ -69,9 +69,9 @@ class Office extends Model
         return $builder->where('approval_status','=',self::APPROVAL_PENDING);
     }
 
-    public function scopeCanceled(Builder $builder)
+    public function scopeCanceled(Builder $builder): Builder
     {
-        $builder->where('approval_status','=',self::APPROVAL_CANCELED);
+        return $builder->where('approval_status','=',self::APPROVAL_CANCELED);
     }
 
     public function scopeVisible(Builder $builder)
