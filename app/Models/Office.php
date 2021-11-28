@@ -83,4 +83,11 @@ class Office extends Model
     {
         return $builder->where('hidden','=',self::NOT_VISIBLE);
     }
+
+    public function scopeHost(Builder $builder, $host_id): Builder
+    {
+        return $builder->when($host_id, function ($query) use ($host_id) {
+            $query->where('user_id', '=', $host_id);
+        });
+    }
 }
