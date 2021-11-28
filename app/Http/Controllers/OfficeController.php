@@ -20,7 +20,7 @@ class OfficeController extends Controller
     {
         $offices = Office::query()
             ->approved()
-            ->where('hidden', Office::VISIBLE)
+            ->visible()
             ->when($request->get('host_id'), function (Builder $builder) use ($request) {
                 $builder->where('user_id', $request->get('host_id'));
             })
