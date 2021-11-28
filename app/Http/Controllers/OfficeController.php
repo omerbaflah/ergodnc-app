@@ -19,7 +19,7 @@ class OfficeController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $offices = Office::query()
-            ->where('approval_status', Office::APPROVAL_APPROVED)
+            ->approved()
             ->where('hidden', Office::VISIBLE)
             ->when($request->get('host_id'), function (Builder $builder) use ($request) {
                 $builder->where('user_id', $request->get('host_id'));
