@@ -22,7 +22,7 @@ class OfficeController extends Controller
             ->approved()
             ->visible()
             ->host($request->get('host_id'))
-            ->when($request->get('user_id'), function (Builder $builder) use ($request) {
+            ->when($request->get('visitor_id'), function (Builder $builder) use ($request) {
                 $builder->whereRelation(
                     'reservations',
                     'user_id',
