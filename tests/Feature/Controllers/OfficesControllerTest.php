@@ -153,7 +153,7 @@ class OfficesControllerTest extends TestCase
         $office->tags()->sync($tagIds);
 
         $response = $this->get(
-            $this->uri . '?host_id=' . $user->id
+            $this->uri . '?user_id=' . $user->id
         )->assertOk()->assertJsonStructure([
             'data' => [
                 '*' => [
@@ -194,7 +194,7 @@ class OfficesControllerTest extends TestCase
         ]);
 
         $response = $this->get(
-            $this->uri . '?host_id=' . $host->id
+            $this->uri . '?user_id=' . $host->id
         )->assertOk()->assertJsonCount(1,'data');
 
         $this->assertEquals($office->id,$response->json('data')[0]['id']);
@@ -241,7 +241,7 @@ class OfficesControllerTest extends TestCase
             'status' => Reservation::STATUS_CANCELED
         ]);
 
-        $response = $this->get($this->uri . '?host_id=' . $user->id)
+        $response = $this->get($this->uri . '?user_id=' . $user->id)
             ->assertOk()
             ->assertSee('reservations_count');
 
@@ -279,14 +279,14 @@ class OfficesControllerTest extends TestCase
         ]);
 
         $response = $this->get(
-            $this->uri . "?host_id=" . $user->id . "&lat=" . $lat . "&lng=" . $lng
+            $this->uri . "?user_id=" . $user->id . "&lat=" . $lat . "&lng=" . $lng
         )->assertOk();
 
         $this->assertEquals($torres_vedras->title,$response->json('data')[0]['title']);
         $this->assertEquals($leiria->title,$response->json('data')[1]['title']);
 
         $response = $this->get(
-            $this->uri . "?host_id=" . $user->id
+            $this->uri . "?user_id=" . $user->id
         )->assertOk();
 
         $this->assertEquals($leiria->title,$response->json('data')[0]['title']);
