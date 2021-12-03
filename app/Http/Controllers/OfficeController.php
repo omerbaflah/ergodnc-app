@@ -21,7 +21,7 @@ class OfficeController extends Controller
         $offices = Office::query()
             ->approved()
             ->visible()
-            ->host($request->get('host_id'))
+            ->owner($request->get('user_id'))
             ->when($request->get('visitor_id'), function (Builder $builder) use ($request) {
                 $builder->whereRelation(
                     'reservations',
