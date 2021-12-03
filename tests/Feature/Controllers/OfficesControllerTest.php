@@ -203,20 +203,20 @@ class OfficesControllerTest extends TestCase
     /**
      * @test
      */
-    public function itFiltersByUserId()
+    public function itFiltersByVisitorId()
     {
         Office::factory()->count(3)->create();
 
-        $user = User::factory()->create();
+        $visitor = User::factory()->create();
 
         $office = Office::factory()->create([
             'approval_status' => Office::APPROVAL_APPROVED
         ]);
 
-        Reservation::factory()->for($office)->for($user)->create();
+        Reservation::factory()->for($office)->for($visitor)->create();
 
         $response = $this->get(
-            $this->uri . '?user_id=' . $user->id
+            $this->uri . '?visitor_id=' . $visitor->id
         )->assertOk()->assertJsonCount(1,'data');
 
         $this->assertEquals($office->id,$response->json('data')[0]['id']);
